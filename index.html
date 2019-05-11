@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Calories Gid</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=cyrillic" rel="stylesheet">
+        <link rel="stylesheet" href="/build/lib/select2/select2.min.css">
+        <link rel="stylesheet" href="/build/lib/datepicker/datepicker.min.css">
+        <link rel="stylesheet" href="/build/lib/chart/chart.min.css">
+        <link href="/build/css/style.css" rel="stylesheet">
+        
+        <script src="/build/js/app.js"></script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a class="link" href="/"><i></i><p>Главная</p></a></li>
+                    <li><a class="link" href="/profile"><i></i><p>Профиль</p></a></li>
+                    <li><a class="link" href="/calendar"><i></i><p>Календарь</p></a></li>
+                    <li><a class="link" href="/stat"><i></i><p>Статистика</p></a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="page home_case">
+                <div class="hc_item hc_products"><h3>Продукты:</h3><div class="hcp_case"></div> </div>
+                <div class="hc_item hc_form hc_formDisable">
+                    <div class="hc_fix">
+                        <a href="/profile" class="link hcfd_item">Заполните форму</a>
+                        <h3>Съедино:</h3>
+                        <form onsubmit="return false;" autocomplete="off">
+                            <select id="meal_select" name="meal"></select>
+                            <input class="inputArrayFoods" type="hidden" name="foods"/>
+
+                        </form>
+                        <div class="eated_case"><div class="ec_item"></div><div class="ec_item eci_add"></div></div>
+                        <div class="eat_need"><div>Нужное кол-во калорий: <span class="nowSum">0</span>/<span class="needSum">500</span> ккал</div></div>
+                        <div class="eated_click">Отправить</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="page profile_case">
+                <h1>Профиль</h1>
+                <div class="pc_form"></div>
+            </div>
+
+            <div class="page calendar_case">
+                <h1>Календарь</h1>
+                <div class="cc_content cc_contentDisable"></div>
+                <div class="hint_case"></div>
+            </div>
+
+            <div class="page stat_case">
+                <h1>Статистика</h1>
+                <div class="sc_content">
+                    <div class="scc_case">
+                        <div class="sccc_item">
+                            <h3>Информация за последние 7 дней:</h3>
+                            <canvas id="stat_canvas"></canvas>
+                        </div>
+                        <div class="sccc_item">
+                            <h3>Чаще всего употребляется:</h3>
+                            <canvas id="eated_canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <footer>© 2019</footer>
+    </body>
+</html>
