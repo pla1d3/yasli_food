@@ -1,0 +1,114 @@
+[
+    {
+		"id": 1,
+        "name": "Свинина",
+		"cat": "protein",
+		"image": "pork.png",
+        "calories": 259
+    },
+    {
+		"id": 2,
+        "name": "Курица",
+		"cat": "protein",
+		"image": "chicken.png",
+        "calories": 190
+    },
+    {
+		"id": 3,
+        "name": "Говядина",
+		"cat": "protein",
+		"image": "beef.png",
+        "calories": 187
+    },
+    {
+		"id": 4,
+        "name": "Индейка",
+		"cat": "protein",
+		"image": "turkey.png",
+        "calories": 144
+    },
+    {
+		"id": 5,
+        "name": "Семга",
+		"cat": "protein",
+		"image": "fish.png",
+        "calories": 140
+    },
+    {
+		"id": 6,
+        "name": "Картошка",
+		"cat": "carb",
+		"image": "potato.png",
+        "calories": 76
+    },
+    {
+		"id": 7,
+        "name": "Макароны",
+		"cat": "carb",
+		"image": "pasta.png",
+        "calories": 112
+    },
+    {
+		"id": 8,
+        "name": "Гречка",
+		"cat": "carb",
+		"image": "buckwheat.png",
+        "calories": 110
+    },
+    {
+		"id": 9,
+        "name": "Рис",
+		"cat": "carb",
+		"image": "rice.png",
+        "calories": 344
+    },
+    {
+		"id": 10,
+        "name": "Огурцы",
+		"cat": "vitamin",
+		"image": "cucumber.png",
+        "calories": 15
+    },
+    {
+		"id": 11,
+        "name": "Помидоры",
+		"cat": "vitamin",
+		"image": "tomato.png",
+        "calories": 18
+    },
+    {
+		"id": 12,
+        "name": "Масло сл.",
+		"cat": "fats",
+		"image": "butter.png",
+        "calories": 748
+    },
+    {
+		"id": 13,
+        "name": "Масло",
+		"cat": "fats",
+		"image": "oil.png",
+        "calories": 900
+    },
+    {
+		"id": 14,
+        "name": "Молоко",
+		"cat": "carb",
+		"image": "milk.png",
+        "calories": 64
+    },
+    {
+		"id": 15,
+        "name": "Шоколад",
+		"cat": "carb",
+		"image": "choco.png",
+        "calories": 544
+    },
+    {
+		"id": 16,
+        "name": "Хлеб",
+		"cat": "carb",
+		"image": "bread.png",
+        "calories": 310
+    }
+]
