@@ -1,4 +1,7 @@
-define(['jquery', 'select2', 'datepicker', 'mask', 'js/connect'], function () {
+define(['js/calendar', 'js/home', 'jquery', 'select2', 'datepicker', 'mask'], function (Calendar, Home) {
+
+    var calendar = new Calendar();
+    var home = new Home();
 
     //check profile
     var profile = JSON.parse(localStorage.getItem('profile')) || null;
@@ -94,6 +97,19 @@ define(['jquery', 'select2', 'datepicker', 'mask', 'js/connect'], function () {
             var needSum = document.getElementsByClassName('needSum')[0];
             needSum.innerHTML = getNeedCalories(profile);
             localStorage.setItem('profile', JSON.stringify(profile));
+
+            var stepMonth = new Date().getMonth() + 1;
+            var stepYear = new Date().getFullYear();
+            
+            var c_content = document.getElementsByClassName('cc_content')[0];
+            calendar.create(stepMonth, stepYear).then(html => {
+                c_content.innerHTML = html;
+                calendar.setEventActiveDay();
+            });
+
+            home.getOptionSelect(profile.method);
+            var needSum = document.getElementsByClassName('needSum')[0];
+            needSum.innerHTML = home.getNeedCalories(profile);
         }
     });
 

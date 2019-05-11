@@ -2,14 +2,14 @@ define(['js/connect', 'jquery'], function (Connect) {
 
     var cnct = new Connect();
     var eated = cnct.eated;
-    var profile = JSON.parse(localStorage.getItem('profile')) || null;
     var stepMonth = new Date().getMonth() + 1;
     var stepYear = new Date().getFullYear();
-
     var caseHint = document.getElementsByClassName('hint_case')[0];
     var hints = null;
 
-    async function createCalendar(month, year) {
+    var Calendar = function(){};
+    Calendar.prototype.create = async function create(month, year) {
+        var profile = JSON.parse(localStorage.getItem('profile')) || null;
         var now = new Date();
 
         var days_labels = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
@@ -45,10 +45,12 @@ define(['js/connect', 'jquery'], function (Connect) {
             next = 1; // next month days
 
         var nowDate = new Date();
-        var startDate = new Date(profile.now_date);
-        var endDate = new Date(profile.date);
-        startDate.setHours(0);
-        endDate.setHours(0);
+        var startDate = profile && new Date(profile.now_date) || 0;
+        var endDate = profile && new Date(profile.date) || 0;
+        if(profile) {
+            startDate.setHours(0);
+            endDate.setHours(0);
+        }
         nowDate.setHours(0, 0, 0, 0);
 
         html += '<div class="ccc_number">';
@@ -91,14 +93,14 @@ define(['js/connect', 'jquery'], function (Connect) {
 
         html += '</div>';
 
-        hints = document.getElementsByClassName('hint_item');
         return html;
     }
 
+    var calendar = new Calendar();
     var c_content = document.getElementsByClassName('cc_content')[0];
-    createCalendar(stepMonth, stepYear).then(html => {
+    calendar.create(stepMonth, stepYear).then(html => {
         c_content.innerHTML = html;
-        setEventActiveDay();
+        calendar.setEventActiveDay();
     });
 
     c_content.addEventListener('click', function(e) {
@@ -109,9 +111,9 @@ define(['js/connect', 'jquery'], function (Connect) {
             } else {
                 stepMonth--;
             }
-            createCalendar(stepMonth, stepYear).then(html => {
+            calendar.create(stepMonth, stepYear).then(html => {
                 c_content.innerHTML = html;
-                setEventActiveDay();
+                calendar.setEventActiveDay();
             });
         } 
         if(e.target.classList[2] == 'cccha_right') {
@@ -121,9 +123,9 @@ define(['js/connect', 'jquery'], function (Connect) {
             } else {
                 stepMonth++;
             }
-            createCalendar(stepMonth, stepYear).then(html => {
+            calendar.create(stepMonth, stepYear).then(html => {
                 c_content.innerHTML = html;
-                setEventActiveDay();
+                calendar.setEventActiveDay();
             });
         }
     });
@@ -200,8 +202,11 @@ define(['js/connect', 'jquery'], function (Connect) {
         });
     }
 
-    function setEventActiveDay() {
+    Calendar.prototype.setEventActiveDay = function setEventActiveDay() {
         var items = document.getElementsByClassName('cccn_itemActive');
+        var hints = document.getElementsByClassName('hint_item');
+        var caseHint = document.getElementsByClassName('hint_case')[0];
+
         [].forEach.call(items, e => {
             e.onmousemove = function(e) {
                 e.target.classList.add('cccn_itemMouse');
@@ -218,5 +223,7 @@ define(['js/connect', 'jquery'], function (Connect) {
             };
         });
     }
+
+    return Calendar;
 
 });

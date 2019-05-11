@@ -1,5 +1,59 @@
 define(['js/connect', 'jquery', 'select2'], function (Connect) {
     
+    var Home = function(){};
+    var home = new Home();
+
+    Home.prototype.getNeedCalories = function getNeedCalories(profile) {
+        var parseDate = profile.date.split('-').reverse();
+        var countDay = Math.ceil((new Date(parseDate[2], +parseDate[1]-1, parseDate[0]) - new Date()) / 8.64e7);
+        if(countDay > 30) countDay = 30;
+        var coef = 0;
+
+        if(profile.method == 2) {
+            coef = 300 / countDay;
+            formFull = ((+profile.weight - +profile.need) * coef);
+            formDay = formFull/3;
+        } else {
+            coef = 900 / countDay;
+            formFull = ((+profile.weight - +profile.need) * coef);
+            formDay = formFull/5;
+        }
+
+        return formDay.toFixed(0);
+    }
+
+    Home.prototype.getOptionSelect = function getOptionSelect(method) {
+        return cnct.eated.done(data => {
+            var nowDate = new Date();
+            nowDate.setHours(0,0,0,0);
+
+            var fData = data.reduce((a,i) => {
+                var pdate = new Date(i.date);
+                pdate.setHours(0,0,0,0);
+                if(Date.parse(nowDate) == Date.parse(pdate)) a.push(i.meal);
+                return a;
+            }, []);
+
+            var selectContent = '';
+            if(method == 'Похудеть') {
+                selectContent = `<option selected disabled>Прием пищи</option>
+                <option `+checkCompleteMeal(fData, 'Завтрак')+` value="Завтрак">Завтрак</option>
+                <option `+checkCompleteMeal(fData, 'Обед')+` value="Обед">Обед</option>
+                <option `+checkCompleteMeal(fData, 'Ужин')+` value="Ужин">Ужин</option>`;
+            } else {
+                selectContent = `<option selected disabled>Прием пищи</option>
+                    <option `+checkCompleteMeal(fData, 'Завтрак')+` value="Завтрак">Завтрак</option>
+                    <option `+checkCompleteMeal(fData, 'Второй завтрак')+` value="Второй завтрак">Второй завтрак</option>
+                    <option `+checkCompleteMeal(fData, 'Обед')+` value="Обед">Обед</option>
+                    <option `+checkCompleteMeal(fData, 'Полдник')+` value="Полдник">Полдник</option>
+                    <option `+checkCompleteMeal(fData, 'Ужин')+` value="Ужин">Ужин</option>`;
+            }
+
+            var meal_select = document.getElementById('meal_select');
+            meal_select.innerHTML = selectContent;
+        });
+    }
+
     // set plugin
     $('#meal_select').select2({minimumResultsForSearch: -1, width: '280px',});
     var cnct = new Connect();
@@ -134,22 +188,24 @@ define(['js/connect', 'jquery', 'select2'], function (Connect) {
         nowSum.innerHTML = sumEated;
     }
 
-    // form
+    // form 
     var formFull = 0;
     var formDay = 0;
     var sumEated = 0;
     var profile = JSON.parse(localStorage.getItem('profile')) || null;
     if(profile) {
-        getOptionSelect(profile.method);
+        home.getOptionSelect(profile.method);
         var needSum = document.getElementsByClassName('needSum')[0];
-        needSum.innerHTML = getNeedCalories(profile);
+        needSum.innerHTML = home.getNeedCalories(profile);
     }                            
     var eated_click = document.getElementsByClassName('eated_click')[0];
     eated_click.addEventListener('click', function() {
         var err = 0;
+        var profile = JSON.parse(localStorage.getItem('profile'));
+        var token =  localStorage.getItem('token');
 
         var validObj = {
-            token: '3JTdFhNssLpF9iPWrNw4yPdALmLPFn',
+            token: token,
             eated: eaterActive.map(i => i.id),
             meal: $('#meal_select').val(),
             method: profile.method,
@@ -194,59 +250,10 @@ define(['js/connect', 'jquery', 'select2'], function (Connect) {
 
     }
 
-    function getNeedCalories(profile) {
-        var parseDate = profile.date.split('-').reverse();
-        var countDay = Math.ceil((new Date(parseDate[2], +parseDate[1]-1, parseDate[0]) - new Date()) / 8.64e7);
-        if(countDay > 30) countDay = 30;
-        var coef = 0;
-
-        if(profile.method == 2) {
-            coef = 300 / countDay;
-            formFull = ((+profile.weight - +profile.need) * coef);
-            formDay = formFull/3;
-        } else {
-            coef = 900 / countDay;
-            formFull = ((+profile.weight - +profile.need) * coef);
-            formDay = formFull/5;
-        }
-
-        return formDay.toFixed(0);
-    }
-
-    function getOptionSelect(method) {
-        return cnct.eated.done(data => {
-            var nowDate = new Date();
-            nowDate.setHours(0,0,0,0);
-
-            var fData = data.reduce((a,i) => {
-                var pdate = new Date(i.date);
-                pdate.setHours(0,0,0,0);
-                if(Date.parse(nowDate) == Date.parse(pdate)) a.push(i.meal);
-                return a;
-            }, []);
-
-            var selectContent = '';
-            if(method == 'Похудеть') {
-                selectContent = `<option selected disabled>Прием пищи</option>
-                <option `+checkCompleteMeal(fData, 'Завтрак')+` value="Завтрак">Завтрак</option>
-                <option `+checkCompleteMeal(fData, 'Обед')+` value="Обед">Обед</option>
-                <option `+checkCompleteMeal(fData, 'Ужин')+` value="Ужин">Ужин</option>`;
-            } else {
-                selectContent = `<option selected disabled>Прием пищи</option>
-                    <option `+checkCompleteMeal(fData, 'Завтрак')+` value="Завтрак">Завтрак</option>
-                    <option `+checkCompleteMeal(fData, 'Второй завтрак')+` value="Второй завтрак">Второй завтрак</option>
-                    <option `+checkCompleteMeal(fData, 'Обед')+` value="Обед">Обед</option>
-                    <option `+checkCompleteMeal(fData, 'Полдник')+` value="Полдник">Полдник</option>
-                    <option `+checkCompleteMeal(fData, 'Ужин')+` value="Ужин">Ужин</option>`;
-            }
-
-            var meal_select = document.getElementById('meal_select');
-            meal_select.innerHTML = selectContent;
-        });
-    }
-
     function checkCompleteMeal(fData, val) {
         if(fData.indexOf(val) != -1) return 'disabled'; 
     }
+
+    return Home;
 
 });  
